@@ -120,8 +120,9 @@ void block_reset(block b) {
 void matrix_mul(matrix m1, matrix m2, matrix m3) {
 	int i, j, k;
 	block b1, b2, b_mul, b_sum;
-	for (i = 0; i < MTRX_SIZE / BLCK_SIZE; i++) {
-		for (j = 0; j < MTRX_SIZE / BLCK_SIZE; j++) {
+#pragma omp parallel for schedule(dynamic)
+	for (j = 0; j < MTRX_SIZE / BLCK_SIZE; j++) {
+		for (i = 0; i < MTRX_SIZE / BLCK_SIZE; i++) {
 			block_reset(b_sum);
 			for (k = 0; k < MTRX_SIZE / BLCK_SIZE; k++) {
 				block_get(b1, m1, i, k);
